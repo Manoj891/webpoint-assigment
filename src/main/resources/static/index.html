@@ -424,7 +424,8 @@
             url: uri + "?name=" + name,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (data) {
+            success: function (res) {
+                const data = res.content;
                 $('#dataTable').empty();
                 if (data.length === 0) {
                     alert('Record Not Found');
@@ -444,7 +445,7 @@
 </td></tr>`;
                     $('#dataTable').append(tableData);
                 }
-                $('#table').DataTable();
+
             },
             error: function (XMLHttpRequest) {
                 ajaxException(XMLHttpRequest);

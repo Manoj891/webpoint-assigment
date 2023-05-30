@@ -7,9 +7,10 @@ import com.ms.assignment.req.ContactDetailsReq;
 import com.ms.assignment.service.ContactDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 @Service
 @Slf4j
@@ -19,10 +20,11 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
 
 
     @Override
-    public List<ContactDetails> findAll(String name) {
+    public Page<ContactDetails> findAll(int pageNumber, String name) {
+        final Pageable pageable = PageRequest.of(pageNumber, 100);
         return name.length() > 0 ?
-                repository.findByFullName(name) :
-                repository.findAll();
+                repository.findByFullName(name, pageable) :
+                repository.findAll(pageable);
     }
 
     @Override

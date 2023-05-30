@@ -2,11 +2,10 @@ package com.ms.assignment.service;
 
 import com.ms.assignment.entity.ContactDetails;
 import com.ms.assignment.req.ContactDetailsReq;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface ContactDetailsService {
-    List<ContactDetails> findAll(String name);
+    Page<ContactDetails> findAll(int pageNumber, String name);
 
     Long save(ContactDetailsReq req);
 

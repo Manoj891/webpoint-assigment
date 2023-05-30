@@ -4,12 +4,12 @@ import com.ms.assignment.entity.ContactDetails;
 import com.ms.assignment.req.ContactDetailsReq;
 import com.ms.assignment.service.ContactDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +19,8 @@ public class ContactDetailsController {
     private final ContactDetailsService service;
 
     @GetMapping
-    public ResponseEntity<List<ContactDetails>> findAll(@RequestParam(defaultValue = "") String name) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.findAll(name));
+    public ResponseEntity<Page<ContactDetails>> findAll(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "") String name) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.findAll(pageNumber, name));
     }
 
     @PostMapping
