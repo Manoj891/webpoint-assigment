@@ -20,7 +20,7 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
 
     @Override
     public List<ContactDetails> findAll(String name) {
-        return name.length() == 0 ?
+        return name.length() > 0 ?
                 repository.findByFullName(name) :
                 repository.findAll();
     }
