@@ -34,7 +34,7 @@
                 <input type='hidden' id='id' class='form-control'/>
                 <div class='col-lg-5 col-sm-5 col-md-5 col-xs-6'>
                     <label>Full Name</label>
-                    <input type='text' name='fullName' id='fullName' class='form-control' placeholder="Full Name"/>
+                    <input type='text' name='fullName' id='fullName' class='form-control' placeholder="Full Name" required/>
                 </div>
                 <div class='col-lg-5 col-sm-5 col-md-5 col-xs-6'>
                     <label>Email Address</label>
@@ -292,7 +292,7 @@
                 <div class='col-lg-5 col-sm-5 col-md-5 col-xs-6'>
                     <label>Mobile Number</label>
                     <input type='text' name='mobileNumber' id='mobileNumber' class='form-control'
-                           placeholder="Mobile No"/>
+                           placeholder="Mobile No"  required/>
                 </div>
                 <div class='col-lg-2 col-sm-2 col-md-2 col-xs-6'>
                     <label>&nbsp;</label><br>
@@ -307,7 +307,7 @@
             <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
                 <input id="find-name" placeholder="Enter Name"/></div>
             <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-                <input type="button" value="Search" onclick="getRecord()"/></div>
+                <input type="button" value="Search" onclick="getRecord(0)"/></div>
         </legend>
         <div>
             <table class='table table-bordered table-hover table-striped' id="table">
@@ -389,7 +389,7 @@
                 $('.btn').button('reset');
                 actionStatus = true;
                 document.getElementById('dataFrom').reset();
-                getRecord();
+                getRecord(0);
             },
             error: function (XMLHttpRequest) {
                 ajaxException(XMLHttpRequest);
@@ -415,17 +415,18 @@
         }
     }
 
-    getRecord();
+    getRecord(0);
 
-    function getRecord() {
+    function getRecord(pageNumber) {
         let name = document.getElementById("find-name").value;
         $.ajax({
             type: "GET",
-            url: uri + "?name=" + name,
+            url: uri + "?pageNumber=" + pageNumber + "&name=" + name,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (res) {
                 const data = res.content;
+                const totalPages = res.totalPages;
                 $('#dataTable').empty();
                 if (data.length === 0) {
                     alert('Record Not Found');
@@ -445,6 +446,16 @@
 </td></tr>`;
                     $('#dataTable').append(tableData);
                 }
+                let pages = "";
+                for (let i = 0; i < totalPages; i++) {
+
+                    if (pageNumber === i) {
+                        pages = pages + "<input type='button' value='" + (i + 1) + "' class='btn btn-success btn-xs'/>&nbsp;";
+                    } else {
+                        pages = pages + "<input type='button' value='" + (i + 1) + "' onclick='getRecord(" + i + ")'/>&nbsp;";
+                    }
+                }
+                $('#dataTable').append(`<tr><td hidden></td><td colspan='3' style="text-align: right">` + pages + `</td></tr>`);
 
             },
             error: function (XMLHttpRequest) {
@@ -453,5 +464,6 @@
         });
     }
 </script>
+
 </body>
 </html>

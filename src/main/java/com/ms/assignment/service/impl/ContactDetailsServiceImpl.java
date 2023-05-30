@@ -21,7 +21,7 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
 
     @Override
     public Page<ContactDetails> findAll(int pageNumber, String name) {
-        final Pageable pageable = PageRequest.of(pageNumber, 100);
+        final Pageable pageable = PageRequest.of(pageNumber, 10);
         return name.length() > 0 ?
                 repository.findByFullName(name, pageable) :
                 repository.findAll(pageable);

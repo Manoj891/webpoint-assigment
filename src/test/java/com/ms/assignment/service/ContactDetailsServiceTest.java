@@ -27,11 +27,21 @@ class ContactDetailsServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    @Test
+    void get_ValidRequest_ReturnsContactDetailsId() {
+        ContactDetails savedContactDetails = ContactDetails.builder().id(1L).emailAddress("mkm@mymail.com").fullName("Manoj Kumar").mobileNumber("+977-9876543210").build();
+        when(repository.save(any(ContactDetails.class))).thenReturn(savedContactDetails);
+
+        Long result = service.save(req);
+
+        assertEquals(savedContactDetails.getId(), result);
+        verify(repository, times(1)).save(any(ContactDetails.class));
+    }
 
     @Test
     void save_ValidRequest_ReturnsContactDetailsId() {
-        ContactDetails savedContactDetails = new ContactDetails();
-        savedContactDetails.setId(1L);
+        ContactDetails savedContactDetails = ContactDetails.builder().id(1L).emailAddress("mkm@mymail.com").fullName("Manoj Kumar").mobileNumber("+977-9876543210").build();
+
         when(repository.save(any(ContactDetails.class))).thenReturn(savedContactDetails);
 
         Long result = service.save(req);
@@ -42,14 +52,11 @@ class ContactDetailsServiceTest {
 
     @Test
     void update_ValidRequest_UpdatesContactDetails() {
-
         Long id = 1L;
-
 
         ContactDetails existingContactDetails = new ContactDetails();
         existingContactDetails.setId(id);
         when(repository.findById(id)).thenReturn(Optional.of(existingContactDetails));
-
 
         service.update(req, id);
 
@@ -68,9 +75,7 @@ class ContactDetailsServiceTest {
         existingContactDetails.setId(id);
         when(repository.findById(id)).thenReturn(Optional.of(existingContactDetails));
 
-
         service.delete(id);
-
 
         verify(repository, times(1)).findById(id);
         verify(repository, times(1)).delete(existingContactDetails);
